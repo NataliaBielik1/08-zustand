@@ -5,7 +5,8 @@ import Footer from "@/components/Footer/Footer";
 
 import "modern-normalize";
 import "./globals.css";
-import TanstackProvider from "@/components/TanstackProvider1/TanstackProvider";
+import TanStackProvider from "@/components/TanStackProvider/TanstackProvider";
+
 
 export const metadata: Metadata = {
   title: "NoteHub",
@@ -21,11 +22,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <TanstackProvider>
+        <TanStackProvider>
           <Header />
           {children}
           <Footer />
-        </TanstackProvider>
+        </TanStackProvider>
       </body>
     </html>
   );
