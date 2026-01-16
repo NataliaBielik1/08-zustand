@@ -5,7 +5,7 @@ import Footer from "@/components/Footer/Footer";
 
 import "modern-normalize";
 import "./globals.css";
-import TanStackProvider from "@/components/TanStackProvider/TanstackProvider";
+import TanStackProvider from "@/components/TanStackProvider/TanStackProvider";
 
 
 export const metadata: Metadata = {
