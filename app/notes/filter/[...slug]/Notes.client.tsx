@@ -10,18 +10,23 @@ import Pagination from "@/components/Pagination/Pagination";
 import Modal from "@/components/Modal/Modal";
 import NoteForm from "@/components/NoteForm/NoteForm";
 import NoteList from "@/components/NoteList/NoteList";
+import { useParams } from "next/navigation";
+import { NoteTag } from "@/types/note";
 
 
 const NotesClient = () => {
+    const { slug } = useParams<{ slug: string[] }>()
+    const tag: NoteTag | string = slug[0]
     console.log("Hello")
     const [currentPage, setCurrentPage] = useState(1)
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState("");
     const changeSearchQuery = useDebouncedCallback((newQuery: string) => { setCurrentPage(1); setSearchQuery(newQuery) }, 300)
     const { data } = useQuery({
-        queryKey: ["notes", searchQuery, currentPage],
-        queryFn: () => fetchNotes(searchQuery, currentPage),
-        placeholderData: keepPreviousData
+        queryKey: ["notes", { searchQuery, currentPage, tag }],
+        queryFn: () => fetchNotes({ searchText: searchQuery, page: currentPage, tag }),
+        placeholderData: keepPreviousData,
+        refetchOnMount: false
     })
 
     const toggleModal = () => {

@@ -7,16 +7,40 @@ interface FetchNotesResponse {
     notes: Note[]
     totalPages: number
 }
-export const fetchNotes = async (searchText: string, page: number) => {
-    const { data } = await axios.get<FetchNotesResponse>("/notes", {
+
+interface FetchNotesProps {
+    searchText?: string;
+    page?: number;
+    tag?: string;
+}
+
+// export const fetchNotes = async (searchText: string, page: number) => {
+//     const { data } = await axios.get<FetchNotesResponse>("/notes", {
+//         params: {
+//             ...(searchText !== "" && { search: searchText }),
+//             page,
+//             perPage: 12
+//         },
+//     });
+//     return data
+// }
+
+
+export const fetchNotes = async ({ searchText = '', page = 1, tag }: FetchNotesProps) => {
+
+
+    const response = await axios.get<FetchNotesResponse>('/notes', {
         params: {
-            ...(searchText !== "" && { search: searchText }),
             page,
-            perPage: 12
+            perPage: 12,
+            ...(searchText && searchText !== "" && { search: searchText }),
+            ...(tag && tag !== "all" && { tag })
         },
     });
-    return data
-}
+    return response.data;
+};
+
+
 
 export const createNote = async (newNote: NewNoteContent) => {
     const { data } = await axios.post<Note>("/notes", newNote)
