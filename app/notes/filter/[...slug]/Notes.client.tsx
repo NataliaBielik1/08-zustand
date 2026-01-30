@@ -7,8 +7,7 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { fetchNotes } from "@/lib/api";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import Pagination from "@/components/Pagination/Pagination";
-import Modal from "@/components/Modal/Modal";
-import NoteForm from "@/components/NoteForm/NoteForm";
+import Link from "next/link";
 import NoteList from "@/components/NoteList/NoteList";
 import { useParams } from "next/navigation";
 import { NoteTag } from "@/types/note";
@@ -19,7 +18,6 @@ const NotesClient = () => {
     const tag: NoteTag | string = slug[0]
     console.log("Hello")
     const [currentPage, setCurrentPage] = useState(1)
-    const [isModalOpen, setIsModalOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState("");
     const changeSearchQuery = useDebouncedCallback((newQuery: string) => { setCurrentPage(1); setSearchQuery(newQuery) }, 300)
     const { data } = useQuery({
@@ -29,9 +27,6 @@ const NotesClient = () => {
         refetchOnMount: false
     })
 
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen)
-    }
 
     const notes = data?.notes ?? []
     const totalPages = data?.totalPages ?? 0
@@ -48,16 +43,11 @@ const NotesClient = () => {
                                 onPageChange={setCurrentPage}
                             />
                         )}
-                        <button className={css.button} onClick={toggleModal}>
+                        <Link className={css.button} href="/notes/action/create">
                             Create note +
-                        </button>
+                        </Link>
                     </header>
 
-                    {isModalOpen && (
-                        <Modal onClose={toggleModal}>
-                            <NoteForm onClose={toggleModal} />
-                        </Modal>
-                    )}
                     {notes.length > 0 && <NoteList notes={notes} />}
                 </section>
             </main>
